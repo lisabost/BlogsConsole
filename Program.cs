@@ -73,7 +73,7 @@ namespace BlogsConsole
                 try
                 {
                     Console.WriteLine("Select the Blog for your Post");
-                    
+
                     //display blogs for options
                     var query = db.Blogs.OrderBy(b => b.BlogId);
                     foreach (var item in query)
@@ -84,21 +84,20 @@ namespace BlogsConsole
                     //create the post
                     Post post = new Post();
 
-                    //link post to blog
+                    //link post to blog using foreign key
                     var blogID = int.Parse(Console.ReadLine());
                     post.BlogId = blogID;
-                    
-                    //TODO: once the blog is selected, the post details can be entered (title/content)
+
+                    //Once the blog is selected, the post details can be entered (title/content)
                     Console.WriteLine("Enter Post title");
                     post.Title = Console.ReadLine();
 
                     Console.WriteLine("Enter Post content");
                     post.Content = Console.ReadLine();
 
-                    //TODO: Posts should be saved to the Posts table - add post to posts list in blog
+                    //Posts should be saved to the Posts table - add post to posts list in blog
                     db.AddPost(post);
                     logger.Info($"Post added - {post.Title}");
-                    //TODO: All user errors should be handled 
                 }
                 catch (Exception ex)
                 {
@@ -109,9 +108,31 @@ namespace BlogsConsole
             else if (choice == "4")
             {
                 logger.Info("User choice: 4 - Display Posts");
-                //TODO: Prompt the user to select the blog they want to view
+
+                //Prompt the user to select the blog they want to view
+                Console.WriteLine("Select the Blog to see Posts");
+
+                //display blogs for options
+                var query = db.Blogs.OrderBy(b => b.BlogId);
+                foreach (var item in query)
+                {
+                    Console.WriteLine($@"{item.BlogId}) {item.Name}");
+                }
+
+                int blogChoice = int.Parse(Console.ReadLine());
+
                 //TODO: Once the Blog is selected, all Posts related to the selected blog should be display as well as the number of Posts
+                var postDisplay = db.Posts.Where(p => p.BlogId.Equals(blogChoice));
+                var numberOfPosts = postDisplay.Count();
+                var blogName = db.Blogs.Where(b => b.BlogId.Equals(blogChoice)).Select(b => b.Name).FirstOrDefault();
+
                 //TODO: For each Post, display the Blog name, Post title and Post content
+                Console.WriteLine($"All posts in the {blogName} blog:");
+                Console.WriteLine($"Number of Posts: {numberOfPosts}");
+                foreach (var item in postDisplay)
+                {
+                    Console.WriteLine($"Blog: {blogName}\nPost title: {item.Title}\nPost Contents: {item.Content}");
+                }
             }
 
             logger.Info("Program ended");
