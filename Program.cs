@@ -129,9 +129,17 @@ namespace BlogsConsole
                 //TODO: For each Post, display the Blog name, Post title and Post content
                 Console.WriteLine($"All posts in the {blogName} blog:");
                 Console.WriteLine($"Number of Posts: {numberOfPosts}");
-                foreach (var item in postDisplay)
+                if (numberOfPosts != 0)
                 {
-                    Console.WriteLine($"Blog: {blogName}\nPost title: {item.Title}\nPost Contents: {item.Content}");
+                    foreach (var item in postDisplay)
+                    {
+                        Console.WriteLine($"Blog: {blogName}\nPost title: {item.Title}\nPost Contents: {item.Content}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("There are no posts for this blog");
+                    logger.Info("No posts exist");
                 }
             }
 
